@@ -1,0 +1,14 @@
+version: '3'
+services:
+  redis-db:
+    image: redis:5.0.7-alpine
+
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - redis-db:redis
+    command: sh -c './wait-for redis-db:6379 -- ./web-text-manager'
+    depends_on:
+      - redis-db
