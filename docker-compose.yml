@@ -1,14 +1,14 @@
-version: '3'
+version: '2'
 services:
-  redis-db:
-    image: redis:5.0.7-alpine
-
+  redis:
+    image: redis:5-alpine
   backend:
-    build: .
+    #image: XXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/<repo name>
+    build:
+      context: .
+      dockerfile: Dockerfile-go
     ports:
       - "8080:8080"
-    links:
-      - redis-db:redis
-    command: sh -c './wait-for redis-db:6379 -- ./web-text-manager'
+    command: sh -c './wait-for redis:6379 -- ./web-text-manager'
     depends_on:
-      - redis-db
+      - redis
