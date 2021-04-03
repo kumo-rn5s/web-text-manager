@@ -15,7 +15,8 @@ func main() {
 
 	db := redis.New(redis.Config{
 		Network:   "tcp",
-		Addr:      getEnv("REDIS_ADDR", "redis:6379"),
+		Addr:      getEnv("REDIS_ADDR", "localhost:6379"),
+		//Addr:      getEnv("REDIS_ADDR", "redis:6379"),
 		Timeout:   time.Duration(30) * time.Second,
 		MaxActive: 10,
 		Username:  "",

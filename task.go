@@ -2,11 +2,16 @@ package main
 
 import (
 	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/sessions"
 	"io/ioutil"
 )
 
 
 func getTask(ctx iris.Context)  {
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	mdData, err := ioutil.ReadFile("userdata/task/task.md")
 	Message := []byte("Default")
 	if err != nil{
@@ -22,6 +27,10 @@ func getTask(ctx iris.Context)  {
 
 
 func SendTask(ctx iris.Context)  {
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	var taskStream MDStream
 	ResponseMessage := []byte("Default")
 	err := ctx.ReadJSON(&taskStream)

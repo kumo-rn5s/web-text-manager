@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"fmt"
+	"github.com/kataras/iris/v12/sessions"
 	"io"
 	"io/ioutil"
 	"log"
@@ -48,6 +49,10 @@ type FileResponse struct {
 }
 
 func getFile(ctx iris.Context){
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	var responseMessage FileResponse
 	getFileName := ctx.URLParam("FileName")
 	if getFileName == ""{
@@ -87,6 +92,10 @@ func getFile(ctx iris.Context){
 	ctx.JSON(responseMessage)
 }
 func saveFile(ctx iris.Context){
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	var MDData MDStream
 	err := ctx.ReadJSON(&MDData)
 	if err != nil{
@@ -111,13 +120,20 @@ func saveFile(ctx iris.Context){
 }
 
 func getFilePath(ctx iris.Context) {
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	ctx.JSON(iris.Map{
 		"presentPath": uploadDir,
 	})
 }
 
 func showAllFiles(ctx iris.Context) {
-
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	changedPath:= ctx.URLParam("changePathRequest")
 
 	filepathNames,err := filepath.Glob(filepath.Join(changedPath,"*"))
@@ -154,6 +170,10 @@ type FileList struct {
 }
 
 func downloadFile(ctx iris.Context){
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	var selectList FileList
 	output := uploadDir + "/" + "Download.zip"
 	if err := os.RemoveAll(output); err != nil {
@@ -185,6 +205,10 @@ func downloadFile(ctx iris.Context){
 }
 
 func deleteFile(ctx iris.Context) {
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 	// It does not contain the system path,
 	// as we are not exposing it to the user.
 	var selectList FileList
