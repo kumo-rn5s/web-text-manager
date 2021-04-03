@@ -1,0 +1,7 @@
+{
+  "dbHost": "localhost",
+  "dbPort": "3306",
+  "dbName": "gorm",
+  "dbUser": "gouser",
+  "dbPass": "password"
+}
