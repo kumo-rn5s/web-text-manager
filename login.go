@@ -52,7 +52,10 @@ func login(ctx iris.Context)  {
 
 func logout(ctx iris.Context) {
 	session := sessions.Get(ctx)
-
 	// Revoke users authentication
 	session.Set("authenticated", false)
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
+		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		return
+	}
 }
