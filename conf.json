@@ -2,6 +2,6 @@
   "dbHost": "mysql",
   "dbPort": "3306",
   "dbName": "gorm",
-  "dbUser": "gouser",
+  "dbUser": "root",
   "dbPass": "password"
 }
