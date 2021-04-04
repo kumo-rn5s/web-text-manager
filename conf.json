@@ -1,5 +1,5 @@
 {
-  "dbHost": "localhost",
+  "dbHost": "mysql",
   "dbPort": "3306",
   "dbName": "gorm",
   "dbUser": "gouser",

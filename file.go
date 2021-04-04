@@ -50,7 +50,9 @@ type FileResponse struct {
 
 func getFile(ctx iris.Context){
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	var responseMessage FileResponse
@@ -93,7 +95,9 @@ func getFile(ctx iris.Context){
 }
 func saveFile(ctx iris.Context){
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	var MDData MDStream
@@ -121,7 +125,9 @@ func saveFile(ctx iris.Context){
 
 func getFilePath(ctx iris.Context) {
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	ctx.JSON(iris.Map{
@@ -131,7 +137,9 @@ func getFilePath(ctx iris.Context) {
 
 func showAllFiles(ctx iris.Context) {
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	changedPath:= ctx.URLParam("changePathRequest")
@@ -171,7 +179,9 @@ type FileList struct {
 
 func downloadFile(ctx iris.Context){
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	var selectList FileList
@@ -206,7 +216,9 @@ func downloadFile(ctx iris.Context){
 
 func deleteFile(ctx iris.Context) {
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	// It does not contain the system path,
