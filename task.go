@@ -9,7 +9,9 @@ import (
 
 func getTask(ctx iris.Context)  {
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	mdData, err := ioutil.ReadFile("userdata/task/task.md")
@@ -28,7 +30,9 @@ func getTask(ctx iris.Context)  {
 
 func SendTask(ctx iris.Context)  {
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	var taskStream MDStream

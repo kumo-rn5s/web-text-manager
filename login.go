@@ -22,6 +22,12 @@ func getEnv(key string, def string) string {
 
 func login(ctx iris.Context)  {
 	session := sessions.Get(ctx)
+	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); auth{
+		ctx.JSON(iris.Map{
+			"result":true,
+		})
+		return
+	}
 	//isNew := session.IsNew()
 
 	var info LoginData
@@ -33,13 +39,19 @@ func login(ctx iris.Context)  {
 		return
 	}
 
+	var user User
+	if err := MYSQLDB.Where("username = ?", info.LoginUsername).First(&user).Error; err != nil {
+		ctx.JSON(iris.Map{
+			"result":false,
+		})
+		return
+	}
 	// here to connect to database, query Username/password
-	CheckUserName := "a1"
-	CheckPassword := "b1"
+	CheckUserName := user.Username
+	CheckPassword := user.Password
 
 	if (info.LoginUsername == CheckUserName)  && (info.LoginPassword == CheckPassword) {
 		session.Set("authenticated", true)
-		session.Set("username", info.LoginUsername)
 		ctx.JSON(iris.Map{
 			"result":true,
 		})
@@ -55,7 +67,9 @@ func logout(ctx iris.Context) {
 	// Revoke users authentication
 	session.Set("authenticated", false)
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 }

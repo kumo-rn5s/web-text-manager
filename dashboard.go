@@ -7,7 +7,9 @@ import (
 
 func dashboard(ctx iris.Context){
 	if auth, _ := sessions.Get(ctx).GetBoolean("authenticated"); !auth{
-		ctx.Redirect("/", iris.StatusPermanentRedirect)
+		ctx.JSON(iris.Map{
+			"redirect": true,
+		})
 		return
 	}
 	// need to check redis key is valid
